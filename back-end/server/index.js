@@ -16,7 +16,7 @@ app.post("/contact", [
   check("firstName").isLength({ max: 25 }).withMessage("First name cannot exceed 25 characters."),
   body("lastName").notEmpty().withMessage("You need to fill out the last name field."),
   check("lastName").isLength({ max: 25 }).withMessage("Last name cannot exceed 25 characters."),
-  body("email").notEmpty().isEmail().withMessage("Please enter a valid email."),
+  body("email").notEmpty().withMessage("Please enter a valid email").isEmail().withMessage("Please enter a valid email."),
   check("email").isLength({ max: 50 }).withMessage("Email cannot exceed 50 characters."),
   body("message").notEmpty().withMessage("You need to fill out the message field."),
   check("message").isLength({ max: 500 }).withMessage("Your message cannot exceed 500 characters."),
@@ -24,10 +24,10 @@ app.post("/contact", [
   async (req, res) => {
     const errors = validationResult(req);
     if (Object.keys(req.body).length === 0) {
-      return res.status(400).json({ message: "You need to fill out the contact form." });
+      return res.status(400).json({ error: "You need to fill out the contact form." });
     }
     else if (!errors.isEmpty()) {
-      return res.status(400).json({ message: errors.array()[0].msg });
+      return res.status(400).json({ error: errors.array()[0].msg });
     }
 
     try {
@@ -66,13 +66,7 @@ app.post("/contact", [
       res.status(200).json({ message: "Contact form successfully submitted." });
     }
     catch (error) {
-      console.log(error);
-      if (error.status) {
-        res.status(error.status).send({ error: error.message });
-      }
-      else {
-        res.status(500).send({ error: "Something went wrong. Please try resubmitting the contact form again later." })
-      }
+      res.status(500).send({ error: "Something went wrong. Please try resubmitting the contact form again later." })
     }
   });
 
