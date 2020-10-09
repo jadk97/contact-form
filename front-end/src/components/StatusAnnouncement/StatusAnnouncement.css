@@ -1,0 +1,17 @@
+.status-announcement{
+
+  text-align: center;
+  padding: 2%;
+  margin-top: 5%;
+  border-radius: 4px;
+}
+
+.status-announcement.success{
+  background: green;
+  border: 1px solid lightgreen;
+}
+
+.status-announcement.error{
+  background: darkred;
+  border: 1px solid red;
+}
